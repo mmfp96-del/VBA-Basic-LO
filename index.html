@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repositório Técnico: VBA Excel para LibreOffice Basic</title>
+    <style>
+        :root {
+            --primary-color: #1e4620; /* Verde escuro institucional / Planilhas */
+            --accent-color: #0078d4;  /* Azul Excel para realces */
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --vba-code-bg: #f1f5f9;
+            --basic-code-bg: #ecfdf5;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2.5rem 1rem;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Sistema de Abas */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            gap: 0.5rem;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 1rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #64748b;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary-color);
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilização Geral de Tabelas e Cards */
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            border-left: 5px solid var(--accent-color);
+            padding-left: 10px;
+            font-size: 1.5rem;
+        }
+
+        .alert-box {
+            background-color: #fffbeb;
+            border-left: 4px solid #d97706;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            color: #92400e;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            background: white;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: #1e293b;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Layout de Código Lado a Lado (Comparativo) */
+        .code-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .code-comparison {
+                grid-template-columns: 1fr;
+            }
+            .tabs {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .tab-btn {
+                text-align: center;
+                border-bottom: none;
+                border-left: 3px solid transparent;
+            }
+            .tab-btn.active {
+                border-left-color: var(--primary-color);
+                border-bottom-color: transparent;
+            }
+        }
+
+        .code-block {
+            border-radius: 6px;
+            padding: 1rem;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-block.vba {
+            background-color: var(--vba-code-bg);
+            border: 1px solid #cbd5e1;
+        }
+
+        .code-block.basic {
+            background-color: var(--basic-code-bg);
+            border: 1px solid #a7f3d0;
+        }
+
+        .code-label {
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+            color: #64748b;
+            display: block;
+        }
+
+        pre {
+            font-family: 'Space Mono', 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            color: #1e293b;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            color: #64748b;
+            border-top: 1px solid var(--border-color);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Repositório de Transição: VBA para LibreOffice Basic</h1>
+        <p>Guia prático e tabelas de equivalência para conversão de macros e automação de planilhas.</p>
+    </header>
+
+    <div class="container">
+        <!-- Navegação por Abas -->
+        <nav class="tabs">
+            <button class="tab-btn active" onclick="openTab(event, 'inicio')">Início</button>
+            <button class="tab-btn" onclick="openTab(event, 'equivalencias')">Tabela de Equivalências</button>
+            <button class="tab-btn" onclick="openTab(event, 'vba-support')">Option VBASupport 1</button>
+            <button class="tab-btn" onclick="openTab(event, 'alternativas')">Alternativas Nativas (Sem Flag)</button>
+        </nav>
+
+        <!-- ABA 1: INÍCIO -->
+        <section id="inicio" class="tab-content active">
+            <div class="card">
+                <h2>Bem-vindo ao Repositório</h2>
+                
+                <p>
+Este portal foi idealizado para centralizar a documentação técnica necessária para migrar rotinas corporativas e acadêmicas desenvolvidas em VBA (MS Excel) para o StarBasic (LibreOffice Calc).
+		</p>
+		
+                <p style="margin-top: 1rem;">Navegue pelas abas acima para encontrar mapeamentos diretos de comandos, entender o comportamento da flag de compatibilidade ou aprender a reescrever seus códigos utilizando a API UNO nativa do LibreOffice.</p>
+            </div>
+        </section>
+
+        <!-- ABA 2: EQUIVALÊNCIAS -->
+        <section id="equivalencias" class="tab-content">
+            <div class="card">
+                <h2>Comandos Equivalentes Diretos</h2>
+                <p>Comandos básicos de manipulação de dados, caixas de diálogo e funções internas que possuem contrapartidas diretas.</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Categoria</th>
+                            <th>Comando VBA (Excel)</th>
+                            <th>Comando Basic (LibreOffice)</th>
+                            <th>Função</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Interface</td>
+                            <td><code>MsgBox "Texto"</code></td>
+                            <td><code>MsgBox "Texto"</code></td>
+                            <td>Exibe uma caixa de mensagem na tela.</td>
+                        </tr>
+                        <tr>
+                            <td>Strings</td>
+                            <td><code>InStr(1, str, "busca")</code></td>
+                            <td><code>InStr(1, str, "busca")</code></td>
+                            <td>Encontra a posição de uma substring.</td>
+                        </tr>
+                        <tr>
+                            <td>Vetores</td>
+                            <td><code>UBound(meuArray)</code></td>
+                            <td><code>UBound(meuArray)</code></td>
+                            <td>Retorna o maior índice disponível em um array.</td>
+                        </tr>
+                        <tr>
+                            <td>Tipos</td>
+                            <td><code>CInt(valor)</code></td>
+                            <td><code>CInt(valor)</code></td>
+                            <td>Converte uma expressão para o tipo Inteiro.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ABA 3: VBA SUPPORT -->
+        <section id="vba-support" class="tab-content">
+            <div class="card">
+                <h2>O Comando <code>Option VBASupport 1</code></h2>
+                <div class="alert-box">
+                    <strong>Atenção:</strong> Esta flag deve ser inserida estritamente na <strong>primeira linha</strong> do seu módulo de código no LibreOffice para ativar o motor de compatibilidade parcial.
+                </div>
+                <p>Quando ativo, o LibreOffice Basic consegue interpretar diretamente diversos objetos nativos do Excel sem a necessidade de reescrever a arquitetura UNO.</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Objeto / Propriedade VBA</th>
+                            <th>Status no LibreOffice</th>
+                            <th>Notas de Uso</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>Worksheets("Plan1").Select</code></td>
+                            <td>Suportado</td>
+                            <td>Funciona perfeitamente para seleção de abas ativas.</td>
+                        </tr>
+                        <tr>
+                            <td><code>Range("A1:B10").Value</code></td>
+                            <td>Suportado</td>
+                            <td>Leitura e escrita simples de dados estruturados.</td>
+                        </tr>
+                        <tr>
+                            <td><code>ActiveCell.Offset(1, 0)</code></td>
+                            <td>Parcial</td>
+                            <td>Pode falhar se o foco da janela principal mudar abruptamente.</td>
+                        </tr>
+                        <tr>
+                            <td>Eventos de Planilha (UserForms complexos)</td>
+                            <td>Não Suportado</td>
+                            <td>Formulários e eventos avançados devem ser reconstruídos do zero.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ABA 4: ALTERNATIVAS NATIVAS -->
+        <section id="alternativas" class="tab-content">
+            <div class="card">
+                <h2>Alternativas Nativas (API UNO)</h2>
+                <p>Abaixo estão exemplos estruturais de como converter comandos comuns do Excel para o padrão nativo do LibreOffice (sem a utilização da flag <code>VBASupport</code>). Esta é a forma mais performática e estável a longo prazo.</p>
+
+                <!-- Exemplo 1 -->
+                <h3 style="margin-top: 2rem; color: #475569;">1. Alterar Cor de Fundo de uma Célula</h3>
+                <div class="code-comparison">
+                    <div class="code-block vba">
+                        <span class="code-label">VBA Excel</span>
+                        <pre>Sub AlterarCorVBA()
+    Range("A1").Interior.Color = RGB(255, 0, 0)
+End Sub</pre>
+                    </div>
+                    <div class="code-block basic">
+                        <span class="code-label">LibreOffice Basic (Nativo)</span>
+                        <pre>Sub AlterarCorBasic()
+    Dim oDoc As Object, oSheet As Object, oCell As Object
+    oDoc = ThisComponent
+    oSheet = oDoc.Sheets(0) 'Primeira planilha
+    oCell = oSheet.getCellRangeByName("A1")
+    oCell.CellBackColor = RGB(255, 0, 0)
+End Sub</pre>
+                    </div>
+                </div>
+
+                <!-- Exemplo 2 -->
+                <h3 style="margin-top: 2rem; color: #475569;">2. Copiar e Colar um Intervalo</h3>
+                <div class="code-comparison">
+                    <div class="code-block vba">
+                        <span class="code-label">VBA Excel</span>
+                        <pre>Sub CopiarIntervaloVBA()
+    Range("A1:A10").Copy Destination:=Range("B1")
+End Sub</pre>
+                    </div>
+                    <div class="code-block basic">
+                        <span class="code-label">LibreOffice Basic (Nativo)</span>
+                        <pre>Sub CopiarIntervaloBasic()
+    Dim oDoc As Object, oSheet As Object
+    Dim oOrigem As New com.sun.star.table.CellRangeAddress
+    Dim oDestino As New com.sun.star.table.CellAddress
+    
+    oDoc = ThisComponent
+    oSheet = oDoc.Sheets(0)
+    
+    ' Definir intervalo de origem (A1:A10)
+    oOrigem.Sheet = 0 : oOrigem.StartColumn = 0 : oOrigem.StartRow = 0
+    oOrigem.EndColumn = 0   : oOrigem.EndRow = 9
+    
+    ' Definir destino (B1)
+    oDestino.Sheet = 0 : oDestino.Column = 1 : oDestino.Row = 0
+    
+    oSheet.copyRange(oDestino, oOrigem)
+End Sub</pre>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>Repositório Técnico de Macros — Criado para fins Educacionais e Científicos.</p>
+    </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            
+            // Esconde todos os conteúdos das abas
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            
+            // Remove a classe 'active' de todos os botões
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            
+            // Mostra a aba atual e adiciona a classe 'active' ao botão clicado
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+</html>
